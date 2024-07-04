@@ -1,4 +1,3 @@
-
 import json
 import zmq
 import datetime
@@ -45,7 +44,7 @@ class server:
                 self.responce('ok')
             elif request_type == 'pop':
                 username=request['username']
-                msg_list = []
+                msg_list=[]
                 if username in self.messages:
                     for m in self.messages[username]:
                         msg_list.append(m.to_dict())
@@ -53,15 +52,12 @@ class server:
                 self.messages[username]=[]
                 self.log(f'{username} pop {len(msg_list)} message(s)')
             elif request_type == 'push':
-                user_from=request['from']
-                user_to=request['to']
-                text=request['text']
-                time=request['time']
-                msg=chatmsg.message(user_from,user_to,text,time)
-                if user_to not in self.messages:
-                    self.messages[user_to]=[msg]
+                msg=request["message"]
+                msg=chatmsg.message_from_dict(request["message"])
+                if msg.to not in self.messages:
+                    self.messages[msg.to]=[msg]
                 else:
-                    self.messages[user_to].append(msg)
+                    self.messages[msg.to].append(msg)
                 self.responce('ok')
             else:
                 self.responce('ko')
