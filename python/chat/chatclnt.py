@@ -34,8 +34,7 @@ class client:
         username = user_input[:space_idx]
         message_text = user_input[space_idx + 1:]
         msg = chatmsg.message(self.name, username, message_text)
-        req = msg.to_dict()
-        req["request"] = "push"
+        req={"request":"push","message":msg.to_dict()}
         self.write(req)
 
     def pop(self):
